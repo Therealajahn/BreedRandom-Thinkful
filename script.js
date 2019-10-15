@@ -3,18 +3,23 @@
 function getDogPhotos(){
     $('#button').on('click',()=>{
     let imageBreed = $('#breed').val();
-   console.log(imageBreed); fetch(`https://dog.ceo/api/breed/${imageBreed}/images/random`)
+   fetch(`https://dog.ceo/api/breed/${imageBreed}/images/random`)
         .then(response =>response.json())
-        .then(responseJSON => 
-        renderDogPhoto(responseJSON.message))
-        .catch(error => console.log(error));
+        .then(responseJSON => { 
+        renderDogPhoto(responseJSON);
+        
+   })
+        .catch(error => console.log('error',error));
     })   
 }
 //put images in a img tag with a for each
 function renderDogPhoto(dogPhoto) {
     $('img').remove();
-   
-    $('form').append(`<img src=${dogPhoto} alt='dog'>`)
+   if(dogPhoto.status === "error"){
+       $('form').append(`<h1> ${dogPhoto.message}</h1>`) 
+   }else{
+    $('form').append(`<img src=${dogPhoto.message} alt='dog'>`)
+   }
     
 }
 
